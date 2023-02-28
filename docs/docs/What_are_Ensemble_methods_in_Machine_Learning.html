@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>机器学习中的集成方法是什么？ &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/What_are_Ensemble_methods_in_Machine_Learning.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/What_are_Ensemble_methods_in_Machine_Learning.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/What_are_Ensemble_methods_in_Machine_Learning.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习中的集成方法是什么？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   背景
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     解决方案 1：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     解决方案 2：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     解决方案 3：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   什么是集成方法？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   集成方法的类型
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     1.装袋
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     2.助推
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     3.堆叠
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id11">
+   备忘单
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id12">
+   概括
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>机器学习中的集成方法是什么？</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习中的集成方法是什么？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   背景
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     解决方案 1：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     解决方案 2：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     解决方案 3：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   什么是集成方法？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   集成方法的类型
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     1.装袋
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     2.助推
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     3.堆叠
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id11">
+   备忘单
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id12">
+   概括
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="id1">
+<h1>机器学习中的集成方法是什么？<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>使用备忘单直观地浏览机器学习中的集成方法</p>
+</section>
+<section id="id2">
+<h1>背景<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h1>
+<p>假设您搬到了一个新地方并想外出就餐。你如何找到一个好地方？</p>
+<p>**解决方案 1：**找一位真正擅长工作的美食评论家，看看他/她是否对您所在地区的餐厅有任何推荐</p>
+<p><strong>解决方案 2：<strong>使用 Google 并随机查看</strong>一位用户</strong>对几家餐厅的评论。</p>
+<p><strong>解决方案 3：<strong>使用 Google 并查看</strong>多个用户</strong>对几家餐厅的评论，然后对<strong>他们的评分进行平均</strong>。</p>
+<p>让我们分析上述每个解决方案。</p>
+<section id="id3">
+<h2>解决方案 1：<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>食品评论家一般都非常<strong>准确</strong>。</p></li>
+<li><p>很难<strong>找到</strong>美食评论家</p></li>
+<li><p>也许您找到的美食评论家是严格的素食主义者，而您不是。那样的话，食评家的推荐就会有失<strong>偏颇</strong>。</p></li>
+</ol>
+</section>
+<section id="id4">
+<h2>解决方案 2：<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<p>另一方面，在互联网上随机获取一个人对餐厅的星级评分是</p>
+<ol class="arabic simple">
+<li><p>不太<strong>准确</strong></p></li>
+<li><p><strong>更容易</strong>找到</p></li>
+</ol>
+</section>
+<section id="id5">
+<h2>解决方案 3：<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>总的来说，它可能恰好是您需要的<strong>准确度</strong></p></li>
+<li><p><strong>在互联网上更容易</strong>找到</p></li>
+<li><p><strong>偏见</strong>要少得多，因为对餐厅进行评分的用户来自不同的背景。</p></li>
+</ol>
+<p>因此，无需向美食评论家询问，只需查看一群随机（但人数众多）的人的集体意见，就可以获得相当不错的餐厅推荐。这被称为<em><strong>群体智慧*</strong></em>，是Quora、Stack-exchange 和 Wikipedia 等*各种信息网站的支柱。</p>
+</section>
+</section>
+<section id="id6">
+<h1>什么是集成方法？<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h1>
+<p>机器学习中的集成方法使用多个弱学习器共同预测输出。您无需为数据集训练一个大型/复杂模型，而是训练多个小型/简单模型（弱学习器）并聚合它们的输出（以各种方式）以形成您的预测，如下图所示</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*Naj64WlDU1L9X3uNBCTf6A.png" /></p>
+<p>推理：集成方法（作者图片）</p>
+</section>
+<section id="id7">
+<h1>集成方法的类型<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h1>
+<p>一般来说，目前 ML 中常用的集成方法有 3 种不同类型</p>
+<ol class="arabic simple">
+<li><p>套袋</p></li>
+<li><p>升压</p></li>
+<li><p>堆叠</p></li>
+</ol>
+<p>这些方法具有相同的<em><strong>群体智慧*<strong>概念，但在重点</strong>关注的细节、使用的</strong></em>*弱学习器类型<strong>以及用于形成最终输出的</strong>聚合类型方面有所不同。**</p>
+<section id="id8">
+<h2>1.装袋<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<p>在Bagging（<strong>Bootstrap</strong> <strong>Agg</strong> erating ）中**，****并行**训练多个弱学习器。对于每个弱学习器，输入数据都是从原始数据集中随机抽样并进行训练的。有放回的子集的随机抽样会产生几乎 iid 的样本。在推理过程中，测试输入被馈送到所有弱学习器并收集输出。最终预测是通过对每个弱学习器的输出进行投票来进行的。</p>
+<p>完整的步骤如下方框图所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*Msptl4h9u0MKn5-3ml-qOA.png" /></p>
+<p>集成方法——Bagging（图片来自作者）</p>
+<p>在装袋方法中，弱学习者通常属于同一类型。由于带替换的随机抽样会创建 iid 样本，并且聚合 iid 变量不会改变偏差但会降低方差，因此装袋方法不会改变预测中的偏差但会降低其<strong>方差</strong>。</p>
+</section>
+<section id="id9">
+<h2>2.助推<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p>在 boosting 中，多个弱学习器被<strong>顺序学习</strong>。每个后续模型都通过更加重视被先前的弱学习者错误分类的数据点来训练。通过这种方式，弱学习者可以专注于特定的数据点，并可以共同减少预测的**偏差。**完整的步骤如下方框图所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*ckjJtevu1tZ0RZCZHGoEVw.png" /></p>
+<p>集成方法——提升（图片来自作者）</p>
+<p>第一个弱学习器通过对数据集中的所有数据点赋予相同的权重进行训练。一旦训练了第一个弱学习器，就会评估<strong>每个点</strong>的预测误差。基于每个数据点的误差，更新下一个学习者的数据点的相应权重。如果数据点被训练的弱学习器正确分类，则其权重降低，否则，其权重增加。除了更新权重之外，每个弱学习器还维护一个标量 alpha，用于量化弱学习器对整个训练数据集进行分类的程度。</p>
+<p>随后的模型在这些加权点集上进行训练。对一组加权点进行训练的一种方法是在误差中表示权重项。不使用均方误差，而是使用加权均方误差，以确保具有更高分配权重的数据点在正确分类时更加重要。另一种方法可以是加权采样，即在训练时基于权重的样本点。</p>
+<p>在推理阶段，测试输入被馈送到所有弱学习器并记录它们的输出。最终预测是通过在将每个弱学习器的输出与相应的弱学习器的权重 alpha 进行缩放之前，在将它们用于投票之前实现的，如上图所示。</p>
+</section>
+<section id="id10">
+<h2>3.堆叠<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<p>在堆叠中，多个弱学习器被并行训练，这类似于装袋中发生的情况。但与bagging不同的是，stacking并不进行简单的投票来聚合每个weak-learner的输出来计算最终的预测。相反，另一个元学习器在弱学习器的输出上进行训练，以学习从弱学习器输出到最终预测的映射。完整的框图可以在下面看到。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*lHJ9NOiODiQm9MGOGm41zA.png" /></p>
+<p>集成方法——堆叠（图片来自作者）</p>
+<p>Stacking 通常有不同类型的弱学习器。因此，一种简单的投票方法为所有弱学习器预测赋予相同的权重似乎不是一个好主意（如果弱学习器在结构上是相同的）。这就是元学习器的用武之地。它试图了解哪个弱学习器更重要。</p>
+<p>弱学习器是并行训练的，而元学习器是顺序训练的。一旦训练了弱学习器，它们的权重就保持不变以训练元学习器。通常，元学习器在与用于训练弱学习器的子集不同的子集上进行训练。</p>
+</section>
+</section>
+<section id="id11">
+<h1>备忘单<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h1>
+<p>以下备忘单涵盖了可能会派上用场的 Ensemble 方法主题。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*TkXkL0mpzWB1PJcHrK3FOg.png" /></p>
+<p>备忘单集成方法（来源：<a class="reference external" href="http://cheatsheets.aqeel-anwar.com/">http</a> ://cheatsheets.aqeel-anwar.com/ ）</p>
+</section>
+<section id="id12">
+<h1>概括<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h1>
+<p>集成方法不是训练一个网络，而是使用多个弱学习器并聚合它们各自的输出以创建最终预测。下表显示了不同 Ensemble 方法的比较。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*QvXYpo_7CV7rwqPbSCFy9A.png" /></p>
+<p>集成方法的比较（作者图片）</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

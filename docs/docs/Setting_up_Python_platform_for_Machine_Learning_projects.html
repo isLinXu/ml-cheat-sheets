@@ -1,0 +1,578 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>为机器学习项目设置 Python 平台 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Setting_up_Python_platform_for_Machine_Learning_projects.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Setting_up_Python_platform_for_Machine_Learning_projects.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Setting_up_Python_platform_for_Machine_Learning_projects.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   为机器学习项目设置 Python 平台
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-ide">
+   第 1 部分 — Python 发行版和 IDE
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   第 2 部分 - 创建新项目时所需的步骤
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#anaconda">
+     第一步：新建Anaconda虚拟环境：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     第 2 步：安装必要的软件包：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conda">
+     第 3 步：有用的 Conda 命令：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pycharm">
+     第 4 步：在 PyCharm 上创建一个新项目
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     第 5 步：在 conda 环境之间切换（可选）
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   概括
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>为机器学习项目设置 Python 平台</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   为机器学习项目设置 Python 平台
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-ide">
+   第 1 部分 — Python 发行版和 IDE
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   第 2 部分 - 创建新项目时所需的步骤
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#anaconda">
+     第一步：新建Anaconda虚拟环境：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     第 2 步：安装必要的软件包：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conda">
+     第 3 步：有用的 Conda 命令：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pycharm">
+     第 4 步：在 PyCharm 上创建一个新项目
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     第 5 步：在 conda 环境之间切换（可选）
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   概括
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="python">
+<h1>为机器学习项目设置 Python 平台<a class="headerlink" href="#python" title="Permalink to this headline">#</a></h1>
+<p>有很多关于如何使用 Python 开始机器学习的深入教程。这些教程主要侧重于深度学习框架（例如 TensorFlow、PyTorch、Keras 等）的使用，例如如何设置基本的监督学习问题，或如何创建一个简单的神经网络并对其进行训练等。但即使在之前人们可以开始尝试使用此类教程，但主机上必须有一个可用的 Python 平台，才能进行这些实践操作。</p>
+<p>几年前，当我开始使用 ML 时，我找不到一个关于如何在我的机器上设置工作平台的好教程。有很多选项/配置可用，我无法决定任何一个。在我决定配置之前，我必须浏览很多网页，并且花了大约 2 周的时间才最终拥有一个工作平台。几个月前，我的一位同事遇到了同样的问题，所以我帮助她搭建了平台，为她节省了不少时间。因此我决定写一篇关于它的详细文章。</p>
+<p>我将这篇文章分为两部分，并将分别关注它们</p>
+<ul class="simple">
+<li><p>**第 1 部分：**选择和安装 Python 发行版和 IDE</p></li>
+<li><p>**第 2 部分：**创建新项目时所需的步骤</p></li>
+</ul>
+</section>
+<section id="python-ide">
+<h1>第 1 部分 — Python 发行版和 IDE<a class="headerlink" href="#python-ide" title="Permalink to this headline">#</a></h1>
+<p>在本文中，我将使用以下 Python 发行版和 IDE。</p>
+<ul class="simple">
+<li><p><strong>Python 发行版：</strong> Anaconda</p></li>
+<li><p><strong>Python 集成开发环境：</strong> PyCharm</p></li>
+</ul>
+<p>什么是<strong>Python</strong>？Anaconda 是 Python 和 R 语言的发行版，具有简化的包管理和部署。使用 anaconda，可以更轻松地拥有多个具有不同配置的 python 环境并在它们之间切换。anaconda 包管理器可以更轻松地解决不同包所需的包的多个版本之间的冲突。<a class="reference external" href="https://www.quora.com/What-are-the-pros-and-cons-of-using-default-Python-and-using-Python-in-Anaconda">可以在此处</a>找到有关使用 Anaconda 的优缺点的详细说明</p>
+<p><strong>下载和安装： Anaconda 发行版可以从</strong><a class="reference external" href="https://www.anaconda.com/distribution/">这里</a>下载。安装说明非常简单。</p>
+<p><strong>PyCharm</strong>是什么？PyCharm 是可用于 python 的众多 IDE 之一。我更喜欢 PyCharm，因为与其他 IDE 相比，它更加用户友好、功能强大且可配置。它提供与 git 的集成，拥有自己的终端和 python 控制台，提供对各种方便的插件的支持，以及许多有用的键盘快捷键。</p>
+<p>**下载和安装：**要下载 PyCharm，请转到此<a class="reference external" href="https://www.jetbrains.com/pycharm/download">链接</a>并下载最新的社区（免费）版本并按照安装说明进行操作</p>
+</section>
+<section id="id1">
+<h1>第 2 部分 - 创建新项目时所需的步骤<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>您将从事的不同项目将需要具有不同版本要求的不同资源和包。因此，始终建议您为每个项目使用单独的虚拟 python 环境。这也确保您不会意外地用其他版本覆盖某些包的任何现有工作版本，从而使其对您当前的项目无用。</p>
+<p>以下是创建新项目时应采取的步骤。</p>
+<section id="anaconda">
+<h2>第一步：新建Anaconda虚拟环境：<a class="headerlink" href="#anaconda" title="Permalink to this headline">#</a></h2>
+<p>打开 Anaconda Prompt 命令并键入</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">myenv</span> <span class="n">python</span><span class="o">==</span><span class="mf">3.5</span>
+</pre></div>
+</div>
+<p><em>这将创建一个名为myenv</em>的新虚拟环境，它将安装并加载 python 3.5 版</p>
+<p>创建环境后，您可以通过使用激活环境来验证它</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span> <span class="c1">#For Windows</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">myenv</span> <span class="c1">#For MAC OS</span>
+</pre></div>
+</div>
+<p>您可以通过键入找到创建的环境 myenv 的位置</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">which</span> <span class="n">python</span> 
+<span class="c1"># 输出看起来像这样</span>
+<span class="c1"># /Users/aqeelanwar/anaconda/envs/myenv/bin/python</span>
+</pre></div>
+</div>
+<p>我们将在第 2 步中使用它来定位我们的环境</p>
+</section>
+<section id="id2">
+<h2>第 2 步：安装必要的软件包：<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<p>激活环境后，您可以使用安装任何所需的包</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1">#通用格式：</span>
+<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>package_name#Example:
+<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span><span class="c1">#安装numpy</span>
+</pre></div>
+</div>
+</section>
+<section id="conda">
+<h2>第 3 步：有用的 Conda 命令：<a class="headerlink" href="#conda" title="Permalink to this headline">#</a></h2>
+<p>以下是有用的 conda 命令，它们将在管理 conda 环境时派上用场</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 激活环境</span>
+conda<span class="w"> </span>activate<span class="w"> </span>env_name
+<span class="c1"># 停用一个环境</span>
+deactivate<span class="w"> </span><span class="c1">#Windows </span>
+<span class="nb">source</span><span class="w"> </span>deactivate<span class="w"> </span><span class="c1">#Linux 和 macOS# 列出所有创建的环境</span>
+conda<span class="w"> </span>env<span class="w"> </span>list#<span class="w"> </span>列出安装在环境中的包
+conda<span class="w"> </span>list#<span class="w"> </span>安装包
+conda<span class="w"> </span>install<span class="w"> </span>package_name#<span class="w"> </span>克隆一个<span class="w"> </span>conda<span class="w"> </span>环境
+conda<span class="w"> </span>create<span class="w"> </span>--clone<span class="w"> </span>name_env_to_be_cloned<span class="w"> </span>--name<span class="w"> </span>name_cloned_env
+</pre></div>
+</div>
+</section>
+<section id="pycharm">
+<h2>第 4 步：在 PyCharm 上创建一个新项目<a class="headerlink" href="#pycharm" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>打开 PyCharm 并选择创建新项目。</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*rxXMDx8hA5L3teCTfoe5QA.png" /></p>
+<ul class="simple">
+<li><p>选择项目的位置和名称（在本例中为 medium_tutorial）。</p></li>
+<li><p>展开 Project Interpreter 选项并选择 Existing interpreter</p></li>
+<li><p>通过单击现有解释器下最右侧的三个点来找到您的环境</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*tOVqb35pTqUMoRO0d_5xnA.png" /></p>
+<ul class="simple">
+<li><p>此时，我们将使用在步骤 1 中从 which python 命令显示的位置定位我们的环境 myenv（如果它还没有在项目解释器列表中：稍后会详细介绍）。此外，我们希望这个环境是可用于我们将来创建的其他项目，因此我们将选中“*对所有项目可用”*复选框</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*bFRCnc5PD0Vdbd3NxkotSg.png" /></p>
+<ul class="simple">
+<li><p>点击确定，然后创建。</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*fBRoDY0nnerC8xTbDuPn5A.png" /></p>
+<ul class="simple">
+<li><p>该项目现在将使用环境 myenv。您可以使用 PyCharm 的内置终端将包安装到此环境中。</p></li>
+<li><p>创建一个新的 .py 文件（比如 main.py）并使用</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="o">&gt;&gt;</span> <span class="n">run</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DQoctMVS2flFpKvyVIXh5Q.png" /></p>
+</section>
+<section id="id3">
+<h2>第 5 步：在 conda 环境之间切换（可选）<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p>如果以后你想为同一个项目在不同的 conda 环境之间切换，你可以按照下面的步骤进行</p>
+<ul class="simple">
+<li><p>PyCharm 只能选择已包含在其项目解释器列表中的环境</p></li>
+<li><p>将新创建的（比如命名为 PyCaffe 的）环境添加到项目解释器列表</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">settings</span> <span class="o">&gt;&gt;</span> <span class="n">Project</span><span class="p">:</span><span class="n">project_name</span> <span class="o">&gt;&gt;</span> <span class="n">Project</span> <span class="n">Interpreter</span>
+</pre></div>
+</div>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*EQUFBwcopHgU4vZa-5vD9g.png" /></p>
+<ul class="simple">
+<li><p>点击右上角的齿轮图标并选择添加</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*O523j9KFnks5Zg8XJZ1Jcg.png" /></p>
+<ul class="simple">
+<li><p>选择</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Conda</span> <span class="n">Environment</span> <span class="o">&gt;</span> <span class="n">Existing</span> <span class="n">environment</span> <span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">three</span> <span class="n">dots</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>并找到新创建的环境并点击确定</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*ur2FZV02yyuMBXVOPBQ60Q.png" /></p>
+<ul class="simple">
+<li><p>现在环境已经添加到Project Interpreter列表中，可以在下拉菜单中看到</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*GBbXaeYzmkYJ8PJmGEPqfw.png" /></p>
+<ul class="simple">
+<li><p>此列表显示现有环境以及您选择的任何环境将用于项目</p></li>
+<li><p><strong>注意：</strong> PyCharm 终端不会自动激活当前选择的环境。如果你已经从项目解释器列表中选择了 PyCaffe env，现在想在其中安装一个新包，你必须首先在终端中激活环境，然后你可以使用 conda install package_name。否则会在之前激活的conda环境中安装包</p></li>
+</ul>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*2W3o1YE7SrW3-7lTjM6SJQ.png" /></p>
+<p>现在您已经完成了平台设置。此时，您可以安装所需的 ML 框架（TensorFlow、Keras、PyTorch）并开始尝试 ML 教程。</p>
+</section>
+</section>
+<section id="id4">
+<h1>概括<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<p>在本教程中，我们了解了处理 ML 项目（或与此相关的任何 Python 项目）的先决条件。我们看到了如何使用 Anaconda 和 PyCharm 拥有多个 Python 环境并在它们之间切换。</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

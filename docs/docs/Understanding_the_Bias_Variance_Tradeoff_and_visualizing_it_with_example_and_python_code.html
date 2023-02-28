@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>了解偏差方差权衡并使用示例和 Python 代码将其可视化 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Understanding_the_Bias_Variance_Tradeoff_and_visualizing_it_with_example_and_python_code.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Understanding_the_Bias_Variance_Tradeoff_and_visualizing_it_with_example_and_python_code.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Understanding_the_Bias_Variance_Tradeoff_and_visualizing_it_with_example_and_python_code.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   了解偏差方差权衡并使用示例和 Python 代码将其可视化
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   背景：它源于哪里？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ml">
+   术语：什么是 ML 系统中的偏差和方差：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   <strong>
+    偏见：
+   </strong>
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   方差：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   权衡：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   Python代码：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   概括：
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     <strong>
+      对于干净且足够大的数据集：
+     </strong>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     对于嘈杂的数据集：
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>了解偏差方差权衡并使用示例和 Python 代码将其可视化</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   了解偏差方差权衡并使用示例和 Python 代码将其可视化
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   背景：它源于哪里？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ml">
+   术语：什么是 ML 系统中的偏差和方差：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   <strong>
+    偏见：
+   </strong>
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   方差：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   权衡：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   Python代码：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   概括：
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     <strong>
+      对于干净且足够大的数据集：
+     </strong>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     对于嘈杂的数据集：
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="python">
+<h1>了解偏差方差权衡并使用示例和 Python 代码将其可视化<a class="headerlink" href="#python" title="Permalink to this headline">#</a></h1>
+<p>机器学习中最重要和最基本的主题之一是偏差方差权衡。在本文中，我们将详细介绍什么是偏差方差权衡，它源于何处，为什么需要考虑它，它如何影响我们的底层系统，以及如何改进我们的 ML模型。</p>
+</section>
+<section id="id1">
+<h1>背景：它源于哪里？<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>ML 系统背后的总体思想是根据收集的样本对数据集的隐藏分布进行建模。如果您从分布中采样足够多，您可以获得相当准确的分布重新创建，如下所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DfRL_SLfgLVwIpzHw71LtQ.png" /></p>
+<p>给定 (x,y) 对，估计 f。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*hymytuOcW8zjS-glWC5XbQ.png" /></p>
+<p>但问题是在现实生活中采集的样本通常有噪声。这种噪声的来源可能有很多因素，例如量化、感官限制等。因此我们没有得到分布的确切输出，而是在其中添加了噪声因子。所以现在的问题是在给定输入 x 及其对应的噪声输出 y 的情况下估计函数 f。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*eSiVJ_aZwVfo_fXE1xJUng.png" /></p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*MW0JR7IZtjq5LCOweAoL0A.png" /></p>
+<p>目标是有效地估计函数 f 并滤除噪声。现在，由于您不太了解添加到样本输出中的噪声，如果处理不当，ML 系统最终会将输入 x 映射到噪声输出 y（称为过度拟合）。此映射不是函数 f 的准确表示，并且会为看不见的测试数据产生高误差。</p>
+<p>偏差方差权衡告诉我们，在存在噪声的情况下，我们的基础系统 (f`(x)) 应该有多复杂才能相当准确地表示我们数据集的分布。</p>
+</section>
+<section id="ml">
+<h1>术语：什么是 ML 系统中的偏差和方差：<a class="headerlink" href="#ml" title="Permalink to this headline">#</a></h1>
+<p>偏差和方差都可以作为我们 ML 系统中的错误来源来解决。假设我们有一个训练数据集<em><strong>D*</strong>，由从隐藏分布 ( <em><strong>y=f(x)+e*</strong> ) 中采样的 (x,y) 对组成。我们从数据集</em></em><em>D*<strong>构建模型</strong></em>f<code class="docutils literal notranslate"><span class="pre">\***，使训练标签和预测值之间的误差最小化</span> <span class="pre">(</span> <span class="pre">***error</span> <span class="pre">=</span> <span class="pre">yf</span></code>(x)*** )。</p>
+</section>
+<section id="id2">
+<h1><strong>偏见：</strong><a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h1>
+<p>**<em>偏差被称为平均模型预测f`(x)*<strong>和基本事实</strong></em>f(x)***之间的误差</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*tge8zF6kZXBbR2g_10V0_w.png" /></p>
+<p><strong>对从不同数据子集D_i</strong>预测的函数进行期望。简而言之，您从隐藏分布中采样<strong>n 个</strong>不同的数据集<strong>D_i</strong>（每个数据集由多个 (x,y) 对组成），并估计<strong>n 个</strong>不同的函数***f_i。***然后</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*qv-QpT5o8u2HiAkmPzXKeA.png" /></p>
+<p>估计函数的偏差告诉我们基础模型预测值的能力。通常，更简单的模型无法捕捉高维数据的复杂性，因此它们具有更高的偏差。例如，您有一个从正弦曲线采样的数据集，您正尝试使用 1 次多项式（即通过函数**<em>y = ax+b）对其进行估计。*<strong>无论您采样多少个数据点 (x,y)，直线永远无法捕捉到正弦曲线的趋势。因此，对于正弦曲线，线模型具有非常高的偏差。另一方面，假设您将多项式的次数增加到 3，即现在用</strong></em>y = ax² +bx+c 来估计它。***该多项式的性能将比前一个多项式好得多，因此在估计正弦曲线时，3 次多项式的偏差比 1 次多项式的偏差小得多。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*cp_O8__Gm663JLw-I0S1TA.png" /></p>
+<p>模型的高偏差与以下相关</p>
+<ol class="arabic simple">
+<li><p>欠拟合——无法捕捉数据趋势</p></li>
+<li><p>更强调泛化</p></li>
+<li><p>训练和测试数据集的高误差</p></li>
+<li><p>过于简化的模型</p></li>
+</ol>
+</section>
+<section id="id3">
+<h1>方差：<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h1>
+<p>方差是指给定数据集的模型预测的平均变异性。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*bpHcbO7ajSVsl2Chqeqh2Q.png" /></p>
+<p>估计函数的方差告诉您该函数能够在多大程度上适应数据集中的变化。方差越大，函数对变化的数据集越稳健。例如，假设您训练两个不同的多项式来拟合从正弦曲线采样的数据，即 1 次多项式和 3 次多项式。您在三个不同的数据集（D1、D2 和 D3）上训练这两个多项式。下图显示了多项式次数和数据集的估计函数。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*eW3iQHXDQ3uvM3O3Rw0LdA.png" /></p>
+<p>可以看出，1 次多项式在三个不同的数据集之间变化不大（因此方差较低），而 3 次多项式的估计彼此差异很大（因此方差较高）。</p>
+<p>模型的高方差与以下相关</p>
+<ol class="arabic simple">
+<li><p>过度拟合——最终对数据集中的噪声进行建模</p></li>
+<li><p>更加强调尽可能接近地拟合每个数据点</p></li>
+<li><p>训练数据的低误差，但测试数据的高误差</p></li>
+<li><p>过于复杂的模型和稀疏的训练数据。</p></li>
+</ol>
+<blockquote>
+<div><p><strong>通常，如果增加底层系统的复杂性，系统的偏差会降低，而方差会增加。它们彼此成反比。你不能同时减少它们。这一点将是偏差方差权衡的基础。</strong></p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h1>权衡：<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<p>ML模型的预期测试误差可以通过以下公式分解为其偏差和方差</p>
+<blockquote>
+<div><p>测试误差 = bias² + 方差 + 不可约误差</p>
+</div></blockquote>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">可以在此处</a>找到对此的完整推导。不可约误差是由于数据中的噪声而产生的误差，与模型的选择无关。</p>
+<p>因此，为了减少估计误差，您需要同时减少偏差和方差。您必须选择一个模型（在我们的示例中是多项式的次数），该模型以最小化误差的方式权衡偏差和方差。在过度拟合和欠拟合的情况下，测试误差都可能很高。因此，我们需要偏差和方差的最佳平衡，以便我们的模型既不会过度拟合也不会欠拟合我们的数据。</p>
+<p>考虑之前的以下示例。我们必须使用多项式从噪声采样数据***D估计正弦曲线。***我们可以从各种不同次数的多项式中进行选择。在理想情况下，我们可以访问足够多的无噪声数据（噪声 = 0），泰勒级数展开告诉我们，如果我们继续增加多项式。但在嘈杂且有限的数据集的情况下，增加多项式的次数也会开始拟合数据中的噪声，并且在测试数据集上表现不佳。因此，我们需要找到在我们的数据集上最有效（即测试误差最小化）的多项式的最佳次数。</p>
+<p>下图绘制了不同多项式的正弦曲线估计。1 次多项式太简单，无法捕捉正弦曲线，而 11 次多项式足够复杂，甚至可以封装噪声（因此偏离我们试图估计的实际正弦曲线）。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*9WZsMZ5ZIeRUcsdjSwG_Bg.png" /></p>
+<p>正弦曲线的多项式回归</p>
+<p>为了找到估计正弦曲线的最佳多项式，我们找到测试数据集的多项式（1、3、5、7、9 和 11 次）的偏差和方差。该图绘制如下。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DMv9-Wbt6pyLlFYrmhUh0w.png" /></p>
+<p>可以看出，在存在噪声的情况下，7 次多项式最适合我们的正弦曲线。该多项式的选择取决于</p>
+<ol class="arabic simple">
+<li><p>样本数据中噪声的数量和性质</p></li>
+<li><p>训练数据量</p></li>
+</ol>
+<p>让我们假设采样的数据集没有噪声。对这个干净的数据集运行相同的实验给出了下图</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*dL7ALyUlApU27b_I0UYxCg.png" /></p>
+<p>上图符合正弦曲线的泰勒级数展开，表明多项式的次数越高，逼近效果越好。完整的代码附在下面。</p>
+</section>
+<section id="id5">
+<h1>Python代码：<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h1>
+<p>正弦曲线估计问题的 python 代码可以在下面找到。模块 gen_data() 中的变量 b 用于控制采样数据中的噪声量。估计函数 f<code class="docutils literal notranslate"><span class="pre">(x)</span> <span class="pre">的期望值是通过估计</span> <span class="pre">num_data=2000</span> <span class="pre">个不同（但重叠）数据集的</span> <span class="pre">f</span></code>(x) 并将其取平均值来找到的。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: aqeelanwar </span>
+<span class="c1"># Created: 16 February,2020, 7:12 PM</span>
+<span class="c1"># Email: aqeel.anwar@gatech.edu</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cmr10&quot;</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">54</span><span class="p">)</span>
+<span class="c1"># random.seed(4959)</span>
+
+<span class="k">def</span> <span class="nf">dist_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">f_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f_x</span>
+
+<span class="k">def</span> <span class="nf">gen_data</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">f_x</span> <span class="o">=</span> <span class="n">dist_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">0.4</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">f_x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">f_x</span><span class="p">,</span> <span class="n">sigma</span>
+
+
+<span class="k">def</span> <span class="nf">get_rand_data</span><span class="p">(</span><span class="n">len_ratio</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">f_x</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">m_new</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">len_ratio</span><span class="o">*</span><span class="n">m</span><span class="p">))</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">m_new</span><span class="p">)</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    <span class="n">f_x1</span> <span class="o">=</span> <span class="n">f_x</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">f_x1</span>
+
+
+<span class="n">x_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">.2</span><span class="p">)</span>
+
+<span class="n">y_orig</span><span class="p">,</span> <span class="n">f_x_orig</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="n">gen_data</span><span class="p">(</span><span class="n">x_orig</span><span class="p">)</span>
+<span class="n">p_order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">]</span>
+<span class="n">num_data</span> <span class="o">=</span> <span class="mi">2000</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">p_order</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">.2</span><span class="p">)</span>
+<span class="n">P</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">bb</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">vv</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">p_order</span><span class="p">):</span>
+    <span class="n">exp_f_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">exp_f_x_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_orig</span><span class="p">))</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_data</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">f_x</span> <span class="o">=</span> <span class="n">get_rand_data</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">x_orig</span><span class="p">,</span> <span class="n">y_orig</span><span class="p">,</span> <span class="n">f_x_orig</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p_val</span><span class="p">))</span>
+        <span class="c1"># ax[j, i].plot(x, y, &#39;o&#39;, t, p(x_orig), &#39;-&#39;)</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">exp_f_x</span> <span class="o">=</span> <span class="n">exp_f_x</span> <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">exp_f_x_plot</span> <span class="o">=</span> <span class="n">exp_f_x_plot</span> <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">x_orig</span><span class="p">)</span>
+
+    <span class="n">exp_f_x</span> <span class="o">=</span> <span class="n">exp_f_x</span><span class="o">/</span><span class="n">num_data</span>
+    <span class="n">exp_f_x_plot</span> <span class="o">=</span> <span class="n">exp_f_x_plot</span> <span class="o">/</span> <span class="n">num_data</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">x_orig</span><span class="p">,</span> <span class="n">exp_f_x_plot</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">(),</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;P=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p_order</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">exp_f_x</span><span class="o">-</span><span class="n">dist_function</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">bb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bias</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_data</span><span class="p">):</span>
+        <span class="n">p_t</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">var</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">p_t</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="n">exp_f_x</span><span class="p">)</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">var</span><span class="o">/</span><span class="n">num_data</span>
+    <span class="n">variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">vv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variance</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bias: &quot;</span><span class="p">,</span> <span class="n">bb</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;var: &quot;</span><span class="p">,</span><span class="n">vv</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;tab:orange&#39;</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Polynomial order&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p_order</span><span class="p">,</span> <span class="n">vv</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+
+<span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;tab:blue&#39;</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Bias&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p_order</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>  <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Bias&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span><span class="o">+</span><span class="n">vv</span><span class="o">+</span><span class="n">sigma</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">min_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p_order</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p_order</span><span class="p">[</span><span class="n">min_ind</span><span class="p">],</span> <span class="n">error</span><span class="p">[</span><span class="n">min_ind</span><span class="p">],</span> <span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="s1">&#39;Minimum Error&#39;</span><span class="p">)</span>
+<span class="n">leg</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+<span class="n">leg</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h1>概括：<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h1>
+<section id="id7">
+<h2><strong>对于干净且足够大的数据集：</strong><a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>模型复杂度越大，估计误差越低，近似越好。</p></li>
+<li><p>模型越复杂，偏差越小</p></li>
+<li><p>模型复杂度越大，方差<strong>越小</strong></p></li>
+</ol>
+</section>
+<section id="id8">
+<h2>对于嘈杂的数据集：<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>更高的模型复杂性并不意味着更低的估计误差</p></li>
+<li><p>模型越复杂，偏差越小</p></li>
+<li><p>模型复杂度越大，方差<strong>越大</strong></p></li>
+</ol>
+<p>由于现实世界中的数据集几乎总是嘈杂和有限的，因此我们需要找到底层模型的最佳复杂性，使我们在数据集上的误差最小。更高的复杂性并不能保证最合适。</p>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,1062 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>机器学习面试主题备忘单 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Cheat Sheets for Machine Learning Interview Topics.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Cheat Sheets for Machine Learning Interview Topics.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Cheat Sheets for Machine Learning Interview Topics.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习面试主题备忘单
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   机器学习模型中的偏差和方差
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c">
+     <strong>
+      c) 详细文章：
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   机器学习中的不平衡数据
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   贝叶斯定理
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id12">
+   主成分分析与降维
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id13">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id14">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id15">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   机器学习中的回归
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id17">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id18">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id19">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id20">
+   机器学习中的正则化
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id21">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id22">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id23">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id24">
+   卷积神经网络基础
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id25">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id26">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id27">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dnn">
+   机器学习中著名的 DNN
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id28">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id29">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id30">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id31">
+   机器学习中的集成方法
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id32">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id33">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id34">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id35">
+   自编码器和变分自编码器
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id36">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id37">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id38">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id39">
+   概括
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>机器学习面试主题备忘单</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习面试主题备忘单
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   机器学习模型中的偏差和方差
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c">
+     <strong>
+      c) 详细文章：
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   机器学习中的不平衡数据
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   贝叶斯定理
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id12">
+   主成分分析与降维
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id13">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id14">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id15">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   机器学习中的回归
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id17">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id18">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id19">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id20">
+   机器学习中的正则化
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id21">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id22">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id23">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id24">
+   卷积神经网络基础
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id25">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id26">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id27">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dnn">
+   机器学习中著名的 DNN
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id28">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id29">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id30">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id31">
+   机器学习中的集成方法
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id32">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id33">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id34">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id35">
+   自编码器和变分自编码器
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id36">
+     一）概述：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id37">
+     b) 示例问题：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id38">
+     c) 详细文章：
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id39">
+   概括
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="id1">
+<h1>机器学习面试主题备忘单<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<blockquote>
+<div><p><a class="reference external" href="http://cheatsheets.aqeel-anwar.com/">从http://cheatsheets.aqeel-anwar.com/</a>下载更新版本的备忘单</p>
+</div></blockquote>
+<p>本文的其余部分基于这些备忘单。对于每个主题，提供</p>
+<ul class="simple">
+<li><p>备忘单形式的概述</p></li>
+<li><p>面试问题示例</p></li>
+<li><p>为详细了解该主题而推荐的文章。</p></li>
+</ul>
+<blockquote>
+<div><p>**注 1：**这些备忘单旨在刷新概念，并不意味着为初学者提供对主题的深入理解。</p>
+<p>**注2：**文章不断更新以获取更多备忘单。</p>
+<p>**资料来源：**所有这些备忘单（以及更多）都可以从<a class="reference external" href="http://www.cheatsheets.aqeel-anwar.com/"><strong>www.cheatsheets.aqeel-anwar.com</strong></a><strong>下载 pdf 格式。</strong></p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h1>机器学习模型中的偏差和方差<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h1>
+<section id="id3">
+<h2>一）概述：<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*gt38bg0Um9qwc4fi0_n9_Q.png" /></p>
+<p>偏差方差权衡备忘单 — 图片作者</p>
+</section>
+<section id="b">
+<h2>b) 示例问题：<a class="headerlink" href="#b" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>ML 模型中的偏差是什么？</p></li>
+<li><p>ML 模型中的方差是什么？</p></li>
+<li><p>偏差和方差之间的权衡是什么？</p></li>
+<li><p>高偏差/高方差 ML 模型的缺点是什么？</p></li>
+<li><p>您如何根据训练数据大小选择模型（高偏差或高方差）？</p></li>
+</ol>
+</section>
+<section id="c">
+<h2><strong>c) 详细文章：</strong><a class="headerlink" href="#c" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/understanding-the-bias-variance-tradeoff-and-visualizing-it-with-example-and-python-code-7af2681a10a7">了解偏差方差权衡并使用示例和 Python 代码将其可视化</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h1>机器学习中的不平衡数据<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<section id="id5">
+<h2>一）概述：<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*wEniP5HewaUSHeIF1_bEiw.png" /></p>
+<p>分类中的不平衡数据 — 图片来自 Author</p>
+</section>
+<section id="id6">
+<h2>b) 示例问题：<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是分类中的不平衡数据？</p></li>
+<li><p>准确性是一个好的性能指标吗？它什么时候无法捕获 ML 系统的性能？</p></li>
+<li><p>什么是精确率和召回率？举个例子</p></li>
+<li><p>如何解决数据不平衡的问题？</p></li>
+</ol>
+</section>
+<section id="id7">
+<h2>c) 详细文章：<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/a-walk-through-imbalanced-classes-in-machine-learning-through-a-visual-cheat-sheet-974740b19094">通过视觉备忘单了解机器学习中的不平衡类</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h1>贝叶斯定理<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h1>
+<section id="id9">
+<h2>一）概述：<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*YS0HjCoJw3kByQxqUJORHA.png" /></p>
+<p>贝叶斯定理和分类器 — 图片来自 Author</p>
+</section>
+<section id="id10">
+<h2>b) 示例问题：<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是贝叶斯定理？</p></li>
+<li><p>实施贝叶斯定理的玩具示例</p></li>
+<li><p>MLE 和 MAP 有什么区别？</p></li>
+<li><p>MAP 和 MLE 什么时候相等？</p></li>
+</ol>
+</section>
+<section id="id11">
+<h2>c) 详细文章：<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://machinelearningmastery.com/bayes-theorem-for-machine-learning/">机器学习贝叶斯定理简介</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id12">
+<h1>主成分分析与降维<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h1>
+<section id="id13">
+<h2>一）概述：<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*LTP0rpo9DZEcx0N_oapizQ.png" /></p>
+<p>PCA 和降维 — 图片来自 Author</p>
+</section>
+<section id="id14">
+<h2>b) 示例问题：<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是主成分分析？</p></li>
+<li><p>我们如何使用 PCA 来降低维度？</p></li>
+<li><p>在 PCA 的上下文中，特征值表示什么？<em>（特征值的大小越大，如果我们将相应的特征向量作为数据的特征向量，则保留的信息越多）</em></p></li>
+</ol>
+</section>
+<section id="id15">
+<h2>c) 详细文章：<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://medium.com/analytics-vidhya/understanding-principle-component-analysis-pca-step-by-step-e7a4bb4031d9">逐步了解主成分分析（PCA）。</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id16">
+<h1>机器学习中的回归<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h1>
+<section id="id17">
+<h2>一）概述：<a class="headerlink" href="#id17" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*k9H8UBrmECwKy-jqAhaiyg.jpeg" /></p>
+<p>回归分析 — 图片由作者提供</p>
+</section>
+<section id="id18">
+<h2>b) 示例问题：<a class="headerlink" href="#id18" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>ML 中的回归是什么？</p></li>
+<li><p>我们如何在回归中引入正则化？<em>（套索和山脊）</em></p></li>
+<li><p>LASSO 和 Ridge 回归对模型的权重有什么影响？<em>（Ridge 试图减小所学权重的大小，而 LASSO 试图将它们强制为零，从而创建一组更稀疏的权重）</em></p></li>
+<li><p>贝叶斯线性回归的预测何时接近线性回归的预测？<em>（当数据点数量足够多时）</em></p></li>
+<li><p>逻辑回归是用词不当吗？<em>（是的，因为不是回归，而是基于回归的分类）</em></p></li>
+</ol>
+</section>
+<section id="id19">
+<h2>c) 详细文章：<a class="headerlink" href="#id19" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/5-types-of-regression-and-their-properties-c5e1fa12d55e">5 种回归类型及其性质</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/introduction-to-bayesian-linear-regression-e66e60791ea7">贝叶斯线性回归简介</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h1>机器学习中的正则化<a class="headerlink" href="#id20" title="Permalink to this headline">#</a></h1>
+<section id="id21">
+<h2>一）概述：<a class="headerlink" href="#id21" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*KBU0hPg94w2TLa1SUgrAEg.png" /></p>
+<p>ML 中的正则化 — 图片由作者提供</p>
+</section>
+<section id="id22">
+<h2>b) 示例问题：<a class="headerlink" href="#id22" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>ML 中的正则化是什么？</p></li>
+<li><p>我们如何解决过度拟合？</p></li>
+<li><p>什么是 K 折交叉验证？</p></li>
+<li><p>L1 和 L2 正则化有什么区别？</p></li>
+<li><p>我们为什么要使用 dropout？</p></li>
+</ol>
+</section>
+<section id="id23">
+<h2>c) 详细文章：<a class="headerlink" href="#id23" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ml-cheatsheet.readthedocs.io/en/latest/regularization.html">正则化</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/regularization-in-machine-learning-76441ddcf99a">机器学习中的正则化</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id24">
+<h1>卷积神经网络基础<a class="headerlink" href="#id24" title="Permalink to this headline">#</a></h1>
+<section id="id25">
+<h2>一）概述：<a class="headerlink" href="#id25" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*shs86xjDskPSMHGneie5pA.png" /></p>
+<p>卷积神经网络 — 图片由作者提供</p>
+</section>
+<section id="id26">
+<h2>b) 示例问题：<a class="headerlink" href="#id26" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是美国有线电视新闻网？</p></li>
+<li><p>解释卷积层和转置卷积层的区别。</p></li>
+<li><p>用于分类的损失函数有哪些？</p></li>
+</ol>
+</section>
+<section id="id27">
+<h2>c) 详细文章：<a class="headerlink" href="#id27" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/a-visualization-of-the-basic-elements-of-a-convolutional-neural-network-75fea30cd78d?source=friends_link&amp;sk=680f483949434299ba538a3e0674a40a">什么是卷积神经网络？</a></p></li>
+</ul>
+</section>
+</section>
+<section id="dnn">
+<h1>机器学习中著名的 DNN<a class="headerlink" href="#dnn" title="Permalink to this headline">#</a></h1>
+<section id="id28">
+<h2>一）概述：<a class="headerlink" href="#id28" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*SsxkxMrjQm2lknRUvEQ6RA.png" /></p>
+<p>著名的 CNN — 图片来自 Author</p>
+</section>
+<section id="id29">
+<h2>b) 示例问题：<a class="headerlink" href="#id29" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>ResNet 网络如何解决梯度消失的问题？</p></li>
+<li><p>Inception Network 的主要关键特征之一是什么？</p></li>
+<li><p>ResNet 网络中的快捷连接是什么？</p></li>
+</ol>
+</section>
+<section id="id30">
+<h2>c) 详细文章：<a class="headerlink" href="#id30" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/the-w3h-of-alexnet-vggnet-resnet-and-inception-7baaaecccc96">AlexNet、VGGNet、ResNet 和 Inception 之间的区别</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id31">
+<h1>机器学习中的集成方法<a class="headerlink" href="#id31" title="Permalink to this headline">#</a></h1>
+<section id="id32">
+<h2>一）概述：<a class="headerlink" href="#id32" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*TkXkL0mpzWB1PJcHrK3FOg.png" /></p>
+</section>
+<section id="id33">
+<h2>b) 示例问题：<a class="headerlink" href="#id33" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是集成学习？</p></li>
+<li><p>什么是 ML 中的 bagging、boosting 和 stacking？</p></li>
+<li><p>bagging 和 boosting 有什么区别？</p></li>
+<li><p>举几个boosting方法</p></li>
+</ol>
+</section>
+<section id="id34">
+<h2>c) 详细文章：<a class="headerlink" href="#id34" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/ensemble-methods-bagging-boosting-and-stacking-c9214a10a205">集成方法：bagging、boosting 和 stacking</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/what-are-ensemble-methods-in-machine-learning-cac1d17ed349">机器学习中的集成方法是什么？</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id35">
+<h1>自编码器和变分自编码器<a class="headerlink" href="#id35" title="Permalink to this headline">#</a></h1>
+<section id="id36">
+<h2>一）概述：<a class="headerlink" href="#id36" title="Permalink to this headline">#</a></h2>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*eyYkfUdklK1EincTjzKf1Q.jpeg" /></p>
+</section>
+<section id="id37">
+<h2>b) 示例问题：<a class="headerlink" href="#id37" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>什么是自动编码器？</p></li>
+<li><p>自动编码器的潜在空间是否正则化？</p></li>
+<li><p>变分自动编码器的损失函数是什么？</p></li>
+<li><p>自动编码器和变分自动编码器有什么区别？</p></li>
+</ol>
+</section>
+<section id="id38">
+<h2>c) 详细文章：<a class="headerlink" href="#id38" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/difference-between-autoencoder-ae-and-variational-autoencoder-vae-ed7be1c038f2">自动编码器 (AE) 和变分自动编码器 (VAE) 之间的区别</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id39">
+<h1>概括<a class="headerlink" href="#id39" title="Permalink to this headline">#</a></h1>
+<p>本文提供了一份备忘单列表，涵盖了机器学习面试的重要主题，并附有一些示例问题。文章中不断添加主题列表和备忘单数量。</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

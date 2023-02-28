@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>AlexNet、VGGNet、ResNet 和 Inception 之间的区别 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Difference_between_AlexNet_VGGNet_ResNet_and_Inception.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Difference_between_AlexNet_VGGNet_ResNet_and_Inception.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Difference_between_AlexNet_VGGNet_ResNet_and_Inception.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   AlexNet、VGGNet、ResNet 和 Inception 之间的区别
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#alexnet">
+   AlexNet
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vggnet">
+   VGGNet：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#resnet">
+   ResNet
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   开始：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   概括
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>AlexNet、VGGNet、ResNet 和 Inception 之间的区别</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   AlexNet、VGGNet、ResNet 和 Inception 之间的区别
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#alexnet">
+   AlexNet
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vggnet">
+   VGGNet：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#resnet">
+   ResNet
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   开始：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   概括
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="alexnetvggnetresnet-inception">
+<h1>AlexNet、VGGNet、ResNet 和 Inception 之间的区别<a class="headerlink" href="#alexnetvggnetresnet-inception" title="Permalink to this headline">#</a></h1>
+<p>在本教程中，我将通过解释 W3H（When、Why、What 和 How）来快速了解四种著名的 CNN 架构的细节以及它们之间的区别</p>
+</section>
+<section id="alexnet">
+<h1>AlexNet<a class="headerlink" href="#alexnet" title="Permalink to this headline">#</a></h1>
+<p><strong>什么时候？</strong></p>
+<ul class="simple">
+<li><p>艾伦图灵年</p></li>
+<li><p>人人享有可持续能源年</p></li>
+<li><p>伦敦奥运会</p></li>
+</ul>
+<p>*<em>为什么？<strong>AlexNet 的诞生是出于改进 ImageNet 挑战赛结果的需要。这是第一个在 2012 年 ImageNet LSVRC-2012 挑战赛中实现相当准确度的</strong></em>深度***卷积网络之一，准确度为 84.7%，而第二好的准确度为 73.8%。使用卷积层和感受野探索了图像帧中空间相关性的想法。</p>
+<p>**什么？**该网络由 5 个卷积 (CONV) 层和 3 个全连接 (FC) 层组成。使用的激活是整流线性单元 (ReLU)。网络中每一层的结构细节可以在下表中找到。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*bD_DMBtKwveuzIkQTwjKQQ.png" /></p>
+<p>Alexnet 框图（来源：oreilly.com）</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*vXBvV_Unz3JAxytc5iSeoQ.png" /></p>
+<p>该网络共有 6200 万个可训练变量</p>
+<p>**如何？**网络的输入是一批大小为 227x227x3 的 RGB 图像，并输出一个对应于每个类别的 1000x1 概率向量。</p>
+<ul class="simple">
+<li><p>进行数据扩充以减少过度拟合. 此数据增强包括镜像和裁剪图像以增加训练数据集的变化。该网络在第一、第二和第五个 CONV 层之后使用重叠的最大池化层。重叠的最大池层只是步幅小于窗口大小的最大池层。3x3 maxpool 层以 2 的步幅使用，因此创建了重叠的感受野。这种重叠将 top-1 和 top-5 错误分别改善了 0.4% 和 0.3%。</p></li>
+<li><p>在 AlexNet 之前，最常用的激活函数是<em>sigmoid</em>和<em>tanh。<em>由于这些函数的饱和特性，它们会遇到梯度消失 (VG) 问题，并使网络难以训练。AlexNet 使用不受 VG 问题影响的</em>ReLU激活函数。<em>原始论文表明，具有</em>ReLU 的网络实现了 25% 的错误率，比具有**tanh</em>非线性的相同网络快约 6 倍。</p></li>
+<li><p>尽管 ReLU 有助于解决梯度消失问题，但由于其无界的性质，学习的变量可能会变得不必要地高。为了防止这种情况，AlexNet 引入了本地响应规范化 (LRN)。LRN 背后的想法是在放大兴奋神经元的同时抑制周围神经元的像素邻域中进行归一化。</p></li>
+<li><p>AlexNet 还通过使用 drop-out 层来解决过拟合问题，其中在训练期间连接被丢弃的概率为 p=0.5。虽然这通过帮助网络摆脱不良的局部最小值来避免网络过度拟合，但收敛所需的迭代次数也增加了一倍。</p></li>
+</ul>
+</section>
+<section id="vggnet">
+<h1>VGGNet：<a class="headerlink" href="#vggnet" title="Permalink to this headline">#</a></h1>
+<p><strong>什么时候？</strong></p>
+<ul class="simple">
+<li><p>国际家庭农业和晶体学年</p></li>
+<li><p>首次机器人登陆彗星</p></li>
+<li><p>罗宾·威廉姆斯逝世年份</p></li>
+</ul>
+<p>**为什么？**VGGNet 的诞生是为了减少 CONV 层中的参数数量并改善训练时间。</p>
+<p>**什么？**VGGNet 有多个变体（VGG16、VGG19 等），它们的区别仅在于网络中的总层数。VGG16 网络的结构细节如下所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*HzxRI1qHXjiVXla-_NiMBA.png" /></p>
+<p>VGG16 框图（来源：neurohive.io）</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*1gA7d9svzp_jRHPsyy63Iw.png" /></p>
+<p>VGG16 共有 1.38 亿个参数。这里要注意的重点是所有 conv 内核的大小都是 3x3，而 maxpool 内核的大小是 2x2，步幅为 2。</p>
+<p>**如何？**固定大小内核背后的想法是，Alexnet（11x11、5x5、3x3）中使用的所有可变大小卷积内核都可以通过使用多个 3x3 内核作为构建块来复制。复制是根据内核覆盖的感受野进行的。</p>
+<p>让我们考虑以下示例。假设我们有一个大小为 5x5x1 的输入层。实施内核大小为 5x5 且步幅为 1 的转换层将导致输出特征图为 1x1。可以通过实现两个步幅为 1 的 3x3 conv 层来获得相同的输出特征图，如下所示</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*C3TmzJI0Nm94NDy9IQg3Qg.png" /></p>
+<p>现在让我们看看需要训练的变量数量。对于一个 5x5 的卷积层过滤器，变量的数量是 25。另一方面，两个内核大小为 3x3 的卷积层总共有 3x3x2=18 个变量（减少了 28%）。</p>
+<p>同样，一个7x7（11x11）conv层的效果可以通过实现三（五）个3x3 conv层，stride为1来实现。这将可训练变量的数量减少了 44.9% (62.8%)。可训练变量数量的减少意味着更快的学习和更稳健的过拟合。</p>
+</section>
+<section id="resnet">
+<h1>ResNet<a class="headerlink" href="#resnet" title="Permalink to this headline">#</a></h1>
+<p><strong>什么时候？</strong></p>
+<ul class="simple">
+<li><p>引力波的发现</p></li>
+<li><p>国际土壤和光基技术年</p></li>
+<li><p>火星电影</p></li>
+</ul>
+<p>**为什么？**神经网络因无法在存在时找到更简单的映射而臭名昭著。</p>
+<ul class="simple">
+<li><p>例如，假设我们有一个完全连接的多层感知器网络，我们想在输入等于输出的数据集上训练它。这个问题最简单的解决方案是让所有隐藏层的所有权重都等于 1，所有偏置都为零。但是当使用反向传播训练这样的网络时，会学习到一个相当复杂的映射，其中权重和偏差具有广泛的值。</p></li>
+<li><p>另一个例子是向现有神经网络添加更多层。假设我们有一个网络<em><strong>f(x)*</strong> ，它在数据集上的准确度达到了</em>n% 。<em>现在向这个网络添加更多层</em><em><em>g(f(x))***应该至少有</em>n%<em>的精度，即在最坏的情况下</em></em><em>g(.)*<strong>应该是一个相同的映射，如果不是，则产生与</strong></em>f(x)***相同的精度更多的。但不幸的是，事实并非如此。实验表明，通过向网络添加更多层，准确性会降低。</p></li>
+<li><p>上述问题的发生是因为梯度消失问题。当我们使 CNN 更深时，反向传播到初始层时的导数在价值上几乎变得微不足道。</p></li>
+</ul>
+<p>ResNet 通过引入两种类型的“快捷方式连接”来解决此网络问题：<em>身份快捷方式</em>和<em>投影快捷方式。</em></p>
+<p>**什么？**ResNetXX 架构有多个版本，其中“XX”表示层数。最常用的是 ResNet50 和 ResNet101。自从梯度消失问题得到解决（更多内容在“如何”部分），CNN 开始变得越来越深。下面我们介绍 ResNet18 的结构细节</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DFDIdrXFYkaJLnefGJ-yKA.png" /></p>
+<p>Resnet18 有大约 1100 万个可训练参数。它由带有大小为 3x3 的过滤器的 CONV 层组成（就像 VGGNet）。整个网络只使用了两个池化层，一个在网络的开头，另一个在网络的结尾。身份连接在每两个 CONV 层之间。实线箭头表示输入和输出维度相同的恒等捷径，而虚线箭头表示维度不同的投影连接。</p>
+<p>**如何？**如前所述，ResNet 架构利用快捷连接来解决梯度消失问题。ResNet 的基本构建块是在整个网络中重复的残差块。</p>
+<p><img alt="img" src="https://miro.medium.com/max/855/1*6WlIo8W1_Qc01hjWdZy-1Q.png" /></p>
+<p>残差块——图像取自原始论文</p>
+<p>网络不是从 x → F(x) 学习映射，而是从 x → F(x)+G(x) 学习映射。当输入 x 和输出 F(x) 的维数相同时，函数 G(x) = x 是恒等函数，快捷连接称为恒等连接。相同的映射是通过在训练期间将中间层中的权重归零来学习的，因为将权重归零比将它们推到一更容易。</p>
+<p>对于 F(x) 的维度与 x 不同的情况（由于在其间的 CONV 层中步长&gt;1），实现的是 Projection 连接而不是 Identity 连接。函数 G(x) 将输入 x 的维度更改为输出 F(x) 的维度。原始论文中考虑了两种映射。</p>
+<ul class="simple">
+<li><p>**不可训练的映射（填充）：**输入 x 简单地用零填充以使维度与 F(x) 的维度匹配</p></li>
+<li><p><strong>Trainable Mapping (Conv Layer)</strong>：1x1 Conv层用于将x映射到G(x)。从上表可以看出，在整个网络中，空间维度要么保持不变，要么减半，深度要么保持不变，要么翻倍，每个卷积层后的宽度和深度的乘积保持不变，即 3584。 1x1 conv 层分别使用步长 2 和此类过滤器的倍数，将空间维度减半，深度加倍。1x1 conv 层数等于 F(x) 的深度。</p></li>
+</ul>
+</section>
+<section id="id1">
+<h1>开始：<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p><strong>什么时候？</strong></p>
+<ul class="simple">
+<li><p>国际家庭农业和晶体学年</p></li>
+<li><p>首次机器人登陆彗星</p></li>
+<li><p>罗宾·威廉姆斯逝世年份</p></li>
+</ul>
+<p>**为什么？**在图像分类任务中，显着特征的大小在图像帧内可能有很大差异。因此，决定一个固定的内核大小是相当困难的。对于分布在图像大面积上的更多全局特征，较大的内核是首选，另一方面，较小的内核在检测分布在图像帧中的特定区域特征方面提供了良好的结果。为了有效识别这种可变大小的特征，我们需要不同大小的内核。这就是盗梦空间所做的。它不是简单地在层数上更深，而是更宽。不同大小的多个内核在同一层内实现。</p>
+<p>**什么？**Inception网络架构由以下结构的几个inception模块组成</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*4ZYNeTDs3ss_fq_MKSq7zQ.png" /></p>
+<p>Inception Module（来源：原论文）</p>
+<p>每个初始模块由四个并行操作组成</p>
+<ul class="simple">
+<li><p>1x1 转换层</p></li>
+<li><p>3x3 转换层</p></li>
+<li><p>5x5 转换层</p></li>
+<li><p>最大池化</p></li>
+</ul>
+<p>以黄色显示的 1x1 conv 块用于深度缩减。然后将四个并行操作的结果按深度连接以形成过滤器连接块（绿色）。Inception 有多个版本，最简单的版本是 GoogLeNet。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*K6jlotOxePRVyREB98HHYg.jpeg" /></p>
+<p>**如何？**Inception 增加了网络空间，通过训练从中选择最佳网络。每个初始模块都可以捕获不同级别的显着特征。全局特征由 5x5 conv 层捕获，而 3x3 conv 层容易捕获分布式特征。最大池操作负责捕获在邻域中突出的低级特征。在给定的级别，所有这些特征在被馈送到下一层之前被提取和连接。我们留给网络/训练来决定哪些特征具有最大的价值和权重。假设数据集中的图像具有丰富的全局特征而没有太多低级特征，那么与 5x5 卷积核相比，经过训练的 Inception 网络对应于 3x3 卷积核的权重非常小。</p>
+</section>
+<section id="id2">
+<h1>概括<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h1>
+<p>在下表中，这四个 CNN 根据它们在 Imagenet 数据集上的前 5 准确度进行了排序。还可以看到可训练参数的数量和前向传递所需的浮点运算 (FLOP)。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*p-2QjvJ4nDCfn3F5oIxvYA.png" /></p>
+<p>可以得出几个比较：</p>
+<ul class="simple">
+<li><p>AlexNet 和 ResNet-152 都有大约 6000 万个参数，但它们的前 5 准确率相差约 10%。但是训练 ResNet-152 需要大量计算（大约是 AlexNet 的 10 倍），这意味着需要更多的训练时间和精力。</p></li>
+<li><p>与 ResNet-152 相比，VGGNet 不仅具有更多的参数和 FLOP，而且精度也有所下降。训练精度降低的 VGGNet 需要更多时间。</p></li>
+<li><p>训练 AlexNet 的时间与训练 Inception 的时间大致相同。内存需求减少 10 倍，精度提高（约 9%）</p></li>
+</ul>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

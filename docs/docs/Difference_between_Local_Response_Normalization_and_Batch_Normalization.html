@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>局部响应归一化和批量归一化之间的区别 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Difference_between_Local_Response_Normalization_and_Batch_Normalization.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Difference_between_Local_Response_Normalization_and_Batch_Normalization.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Difference_between_Local_Response_Normalization_and_Batch_Normalization.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   局部响应归一化和批量归一化之间的区别
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     关于深度神经网络中使用的不同规范化技术的简短教程。
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   为什么规范化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   本地响应归一化
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   批量归一化：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   比较：
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>局部响应归一化和批量归一化之间的区别</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   局部响应归一化和批量归一化之间的区别
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     关于深度神经网络中使用的不同规范化技术的简短教程。
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   为什么规范化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   本地响应归一化
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   批量归一化：
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   比较：
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="id1">
+<h1>局部响应归一化和批量归一化之间的区别<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<section id="id2">
+<h2>关于深度神经网络中使用的不同规范化技术的简短教程。<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+<section id="id3">
+<h1>为什么规范化？<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h1>
+<p>归一化对于补偿某些激活函数（例如 ReLU、ELU 等）的无界性质的深度神经网络变得很重要。有了这些激活函数，输出层就不会被限制在有界范围内（例如 [-1,1]对于<em>tanh</em>），而是他们可以在训练允许的范围内成长。为了限制无界激活增加输出层值，在激活函数之前使用归一化。深度神经网络中使用了两种常见的归一化技术，并且经常被初学者误解。在本教程中，将讨论这两种规范化技术的详细解释，突出它们的主要区别。</p>
+</section>
+<section id="id4">
+<h1>本地响应归一化<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<p>局部响应归一化 (LRN) 最初是在 AlexNet 架构中引入的，其中使用的激活函数是<em>ReLU</em>，而不是当时更常见的<em>tanh</em>和*sigmoid 。<em>除了上述原因外，使用 LRN 的原因是为了鼓励</em>侧抑制。*它是神经生物学中的一个概念，指的是神经元减少其邻居活动的能力 [1]。在 DNN 中，这种横向抑制的目的是进行局部对比度增强，以便将局部最大像素值用作下一层的激励。</p>
+<p>LRN 是一个<strong>不可训练的层</strong>，它对局部邻域内特征图中的像素值进行平方归一化。根据定义的邻域，LRN 有两种类型，如下图所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*MFl0tPjwvc49HirAJZPhEA.png" /></p>
+<p><strong>Inter-Channel LRN：<strong>这个原来是AlexNet论文用的。定义的邻域在</strong>通道对面</strong>。对于每个(x,y)位置，在深度维度上进行归一化，由下式给出</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*JXGTZuvplcGpyE8DuP4B2w.png" /></p>
+<p>AlexNet中使用的LRN [2]</p>
+<p>其中<em>i</em>表示滤波器i的输出，<em>a(x,y),b(x,y)分别为归一化前后</em>*(x,y)<em>位置的像素值，N为通道总数。常数</em>(k,α,β,n)<em>是超参数。<em>k</em>用于避免任何奇点（被零除），<em>α</em>用作归一化常数，而</em>β<em>是对比常数。常量</em>n<em>用于定义邻域长度，即在执行归一化时需要考虑多少个连续像素值。</em>( k,α,β,n)=(0,1,1,N)*的情况是标准归一化）。在上图中，当 N=4 时，n 取为 2。</p>
+<p>让我们看一个 Inter-channel LRN 的例子。考虑下图</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DmnOhSTIzn04sC0w1d3FPg.png" /></p>
+<p>不同的颜色表示不同的通道，因此 N=4。让超参数为 ( <em>k,α,β,n)=(0,1,1,2)。**n=2</em>的值意味着在计算位置*(i,x,y)<em>处的归一化值时，我们考虑前一个和下一个过滤器在相同位置的值，即</em>(i-1, x, y)<em>和</em>(i +1, x, y)<em>。对于</em>(i,x,y)=(0,0,0)<em>我们有</em>value(i,x,y)=1*，<em>value(i-1,x,y)<em>不存在并且</em>value(i+,x, y)=1</em>。因此<em>normalized_value(i,x,y) = 1/(¹²+¹²) = 0.5</em>并且可以在上图的下半部分看到。其余的归一化值以类似的方式计算。</p>
+<p>**Intra-Channel LRN：**在Intra-channel LRN中，邻域仅在同一通道内扩展，如上图所示。公式由下式给出</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*-19IMI2wJVDtaz4Uf4dRog.png" /></p>
+<p>其中 (W,H) 是特征图的宽度和高度（例如上图中的 (W,H) = (8,8)）。Inter 和 Intra Channel LRN 之间的唯一区别是归一化的邻域。在通道内 LRN 中，在考虑中的像素周围定义了一个 2D 邻域（与 Inter-Channel 中的 1D 邻域相反）。例如，下图显示了 n=2 的 5x5 特征图上的通道内归一化（即以 (x,y) 为中心的大小为 (n+1)x(n+1) 的 2D 邻域）。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*vFC3KU-wQPG1ZnXFYC_xPQ.png" /></p>
+</section>
+<section id="id5">
+<h1>批量归一化：<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h1>
+<p>批量归一化 (BN) 是一个<strong>可训练层，通常用于解决</strong>*<strong>内部协变量偏移 (ICF)*</strong> [1]的问题*。*ICF 的产生是由于隐藏神经元/激活的变化分布。考虑以下二元分类示例，我们需要对玫瑰和非玫瑰进行分类</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*gUOjaIspVsz-PVxLDLQGQA.png" /></p>
+<p>玫瑰与非玫瑰分类。右侧绘制的特征图对于从数据集 [1] 中采样的两个不同批次具有不同的分布</p>
+<p>假设我们已经训练了一个神经网络，现在我们从数据集中选择两个外观明显不同的批次进行推理（如上所示）。如果我们对这两个批次进行正向传递并绘制隐藏层（网络深处）的特征空间，我们将看到分布发生显着变化，如上图右侧所示。这称为输入神经元的**<em>协变量偏移。*<strong>这对训练有什么影响？在训练期间，如果我们选择属于不同分布的批次，那么它会减慢训练速度，因为对于给定的批次，它会尝试学习特定的分布，而这对于下一批次是不同的。因此它在分布之间不断来回跳动直到收敛。这个</strong></em>协变量偏移***可以通过确保批次中的成员不属于相同/相似的分布来缓解。这可以通过为批次随机选择图像来完成。隐藏神经元也存在类似的 Covariate Shift。即使批次是随机选择的，隐藏的神经元最终也会有一定的分布，这会减慢训练速度。这种隐藏层的 Covariate shift 称为 Internal Covariate Shift。问题是我们不能像控制输入神经元那样直接控制隐藏神经元的分布，因为它会随着训练更新训练参数而不断变化。Batch Normalization 有助于缓解这个问题。</p>
+<p>在批量归一化中，隐藏神经元的输出在被馈送到激活函数之前按以下方式处理。</p>
+<ol class="arabic simple">
+<li><p>将整个批次<em>B</em>归一化为零均值和单位方差</p></li>
+</ol>
+<ul class="simple">
+<li><p>计算整个小批量输出的均值：<em>u_B</em></p></li>
+<li><p>计算整个mini-batch输出的方差：s <em>igma_B</em></p></li>
+<li><p>通过减去均值并除以方差来归一化小批量</p></li>
+</ul>
+<p>\2. 引入两个可训练参数（<em>Gamma:</em> scale_variable 和<em>Beta:</em> shift_variable）来缩放和移动归一化的小批量输出</p>
+<p>\3. 将这个经过缩放和移位的归一化小批量输入到激活函数中。</p>
+<p>BN算法如下图所示。</p>
+<p><img alt="img" src="https://miro.medium.com/max/608/1*Hiq-rLFGDpESpr8QNsJ1jg.png" /></p>
+<p>批量归一化算法 [2]</p>
+<p>对批处理中所有激活的每个像素执行归一化。考虑下图。假设我们有一个大小为 3 的小批量。隐藏层产生大小为 (C,H,W) = (4,4,4) 的激活。由于批量大小为 3，我们将有 3 个这样的激活。现在对于激活中的每个像素（即每个 4x4x4=64 像素），我们将通过找到所有激活中该像素位置的均值和方差来对其进行归一化，如下图左侧所示。一旦找到均值和方差，我们将从每个激活中减去均值并将其除以方差。下图的右侧部分描述了这一点。减法和除法是逐点进行的。（如果您习惯使用 MATLAB，则除法是点除法**./**）。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*PgUwNzUYs2_Sp5nrPfSZ5g.jpeg" /></p>
+<p>第 2 步（即缩放和移动）的原因是让训练决定我们是否需要归一化。在某些情况下，不进行标准化可能会产生更好的结果。因此，BN 不是事先选择是否包含归一化层，而是让训练来决定它。当<em>Gamma = sigma_B</em>和<em>Beta = u_B</em>时，不进行归一化，并恢复原始激活。<a class="reference external" href="https://www.coursera.org/lecture/deep-neural-network/why-does-batch-norm-work-81oTm">可以在这里</a>找到由 Andrew Ng 编写的关于 BN 的非常好的视频教程</p>
+</section>
+<section id="id6">
+<h1>比较：<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h1>
+<p>LRN 有多个方向来跨（通道间或通道内）执行归一化，另一方面，BN 只有一种执行方式（对于所有激活的每个像素位置）。下表比较了两种归一化技术。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*J7rxGz1f_2YWjdcsvqNCNA.png" /></p>
+<p><strong>参考：</strong></p>
+<p>[1] https://www.learnopencv.com/batch-normalization-in-deep-networks/</p>
+<p>[2] Ioffe、Sergey 和 Christian Szegedy。“批量归一化：通过减少内部协变量偏移来加速深度网络训练。” <em>arXiv 预印本 arXiv:1502.03167</em> (2015)。</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

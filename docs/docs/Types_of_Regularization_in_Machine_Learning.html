@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>机器学习中的正则化类型 &#8212; 机器学习备忘录</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="shortcut icon" href="../_static/panda.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">机器学习备忘录</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets//issues/new?title=Issue%20on%20page%20%2Fdocs/Types_of_Regularization_in_Machine_Learning.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/isLinXu/ml-cheat-sheets/edit/master/docs/Types_of_Regularization_in_Machine_Learning.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/Types_of_Regularization_in_Machine_Learning.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习中的正则化类型
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   为什么要正则化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   什么是正则化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   正则化的类型
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     1.修改损失函数
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#al2">
+     A。L2 正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b-l1">
+     b. L1 正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c">
+     C。熵正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     2.修改采样方式
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a">
+     A。数据增强（弱）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b-k">
+     b. K 折交叉验证（中等）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     3.修改训练算法
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-dropout">
+     a.Dropout（强）
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b">
+     b. 注入噪声（弱）
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   概括
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>机器学习中的正则化类型</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   机器学习中的正则化类型
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   为什么要正则化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   什么是正则化？
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   正则化的类型
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     1.修改损失函数
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#al2">
+     A。L2 正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b-l1">
+     b. L1 正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c">
+     C。熵正则化（强）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     2.修改采样方式
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a">
+     A。数据增强（弱）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b-k">
+     b. K 折交叉验证（中等）：
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     3.修改训练算法
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-dropout">
+     a.Dropout（强）
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#b">
+     b. 注入噪声（弱）
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   概括
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="id1">
+<h1>机器学习中的正则化类型<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h1>
+<p>机器学习正则化初学者指南。</p>
+<p>在本文中，我们将介绍什么是正则化，为什么需要它，以及机器学习模型中常用的正则化类型有哪些。</p>
+</section>
+<section id="id2">
+<h1>为什么要正则化？<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h1>
+<p>正则化通常用作机器学习中过度拟合问题的解决方案。过度拟合的常见原因是</p>
+<ol class="arabic simple">
+<li><p>当模型足够复杂时，它开始对训练数据中的噪声进行建模。</p></li>
+<li><p>当训练数据相对较小并且不能充分表示从中采样的基础分布时，模型无法学习可概括的映射。</p></li>
+</ol>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*vCGSqy05QbiYhvdH4DXxBw.png" /></p>
+<p>机器学习中的过度拟合——图片来自作者</p>
+<p>正则化帮助我们克服过度拟合的问题。</p>
+</section>
+<section id="id3">
+<h1>什么是正则化？<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h1>
+<p><em>正则化由不同的技术和方法组成，用于通过减少泛化误差而不影响训练误差来解决过度拟合问题</em>*.* 为训练数据点选择过于复杂的模型通常会导致过度拟合。另一方面，更简单的模型会导致数据欠拟合。因此，在模型中选择合适的复杂度至关重要。由于模型的复杂性不能直接从可用的训练数据中推断出来，因此通常不可能偶然发现正确的模型复杂性来进行训练。</p>
+<p>这就是正则化发挥作用的地方，使复杂模型容易过度拟合。</p>
+</section>
+<section id="id4">
+<h1>正则化的类型<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<p>根据克服过拟合的方法，我们可以将正则化技术分为三类。根据方法在解决过度拟合问题方面的有效性，每种正则化方法被标记为强、中和弱。</p>
+<section id="id5">
+<h2>1.修改损失函数<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<p>在这些正则化技术中，优化模型的损失函数被修改为直接考虑学习参数或输出分布的范数。我们有以下基于损失函数的正则化技术。</p>
+</section>
+<section id="al2">
+<h2>A。L2 正则化（强）：<a class="headerlink" href="#al2" title="Permalink to this headline">#</a></h2>
+<p>考虑以下具有均方损失的线性回归问题。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*lI-jrI2hMQiuRcDSokE5mw.png" /></p>
+<p>在 L2 正则化中，我们修改损失以包括正在优化的权重 (beta) 的加权 L2 范数。这可以防止权重变得太大，从而避免它们过度拟合。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*zFuomRDJFeqtMy1sbekywQ.png" /></p>
+<p>使用 L2 正则化修改损失 — 图片来自 Author</p>
+<p>常数 lambda (≥0) 用于控制过度拟合和欠拟合之间的折衷。当 lambda 高（低）时，模型容易欠拟合（过拟合）。</p>
+<p>让我们考虑二维情况 (n=2)，我们可以在其中可视化笛卡尔平面中的回归。下图在笛卡尔平面上绘制了损失函数的两部分（MSE 损失和 L2 正则化）。L2 正则化器被绘制为一个半径等于 lambda 的圆。MSE 损失已绘制为等值线图，其中损失在椭圆上相等。解决上面显示的 L2 正则化损失的权重在视觉上意味着找到位于绿色球内的 MSE 轮廓（蓝色）上具有最小损失的点。增加 lambda 的值对应于增加绿色球的大小。当 lambda 增加超过某个点时，绿色球开始与实际未调节的最小值点相交（在图中显示为“没有正则化的最佳 beta_0，beta_1”）。这意味着将 lambda 增加到超出此范围不会改变我们的解决方案。对于解决过拟合问题的模型，选择的 lambda 值必须介于此 lambda 值和 0 之间。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*lFmQebk5GoibKN2ZQYzYpw.png" /></p>
+<p>解决上面显示的 L2 正则化损失的权重在视觉上意味着找到位于 L2 球（绿色圆圈）内的 MSE 轮廓（蓝色）上损失最小的点。</p>
+</section>
+<section id="b-l1">
+<h2>b. L1 正则化（强）：<a class="headerlink" href="#b-l1" title="Permalink to this headline">#</a></h2>
+<p>在 L1 正则化中，不使用损失函数中权重的 L2 范数，而是使用权重的 L1 范数（绝对值）。修改后的损失变为</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*oYyGL3TFuKkh5xTlcPrVSQ.png" /></p>
+<p>L1 正则化修正损失 — 图片作者：Author</p>
+<p>就像 L2 正则化器一样，L1 正则化器在 MSE 等高线图上找到位于单位范数球内的损失最小的点。L1 范数的单位范数球是一个有边的菱形。从视觉上看，这可以在下图中看到。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*P3bTxrYuLGhF5-m0WEgomQ.png" /></p>
+<p>解决上面显示的 L1 正则化损失的权重在视觉上意味着找到位于 L1 球（贪婪菱形）内的 MSE 轮廓（蓝色）上损失最小的点。</p>
+<p>使用 L1 正则化器优于 L2 正则化器的额外优势是 L1 范数往往会导致权重稀疏。这意味着，使用这样的正则化器，权重 beta 可能包含零元素。L2 正则化器的权重可以变得非常小，但它们实际上永远不会变为零。</p>
+<p>增加 lambda 的值会增加菱形的大小，从而减少实际的 MSE 损失。这意味着权重开始越来越适合数据点，这可能导致过度拟合。与 L2 正则化器类似，当 lambda 非常高时，回归模型的未调节最小值与 L1 调节最小值相同。</p>
+</section>
+<section id="c">
+<h2>C。熵正则化（强）：<a class="headerlink" href="#c" title="Permalink to this headline">#</a></h2>
+<p>熵根据其中的不确定性来量化概率分布。分布的不确定性越大，熵就越大。均匀分布的所有事件发生的概率相等，这意味着不确定性最大，因此熵最大。另一方面，脉冲分布意味着如果从这样的分布中抽取随机事件，我们知道它总是相同的。因此，这种脉冲分布具有最小熵。</p>
+<p>当模型的输出是概率分布时使用熵正则化，例如分类、策略梯度强化学习等。熵正则化器不是直接使用损失项中的权重范数，而是包括按比例缩放的输出分布的熵通过拉姆达。</p>
+<p>考虑以下分类问题。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*aMfwFD1vtCXIVuCfPpPxYA.png" /></p>
+<p>损失函数通常是二元交叉熵或铰链损失。在熵正则化的情况下，损失函数修改如下</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*e22QgKGc8ia9LwOmuBl0OQ.png" /></p>
+<p>熵正则化修正损失 — 图片作者：Author</p>
+<p>由于我们希望输出概率具有一定程度的不确定性，这意味着我们要增加熵。由于我们正在减少损失，因此在损失函数中使用熵需要乘以 -1。缩放常数 lambda 控制正则化。lambda 的值越大，输出分布越均匀。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*DLZrJNJzOxVSila28qhcJA.png" /></p>
+<p>熵正则化输出分布 — 图片作者：Author</p>
+</section>
+<section id="id6">
+<h2>2.修改采样方式<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<p>这些方法对于克服由于可用数据集大小有限而引起的过度拟合很有用。这些正则化方法试图操纵可用输入以创建实际输入分布的公平表示。以下是属于此类的两种正则化方法</p>
+</section>
+<section id="a">
+<h2>A。数据增强（弱）：<a class="headerlink" href="#a" title="Permalink to this headline">#</a></h2>
+<p>数据增强涉及通过随机裁剪、扩张、旋转、添加少量噪声等创建的更多输入来增加可用数据集的大小，如下面的示例图所示。这个想法是人为地创建更多数据，希望增强的数据集能够更好地表示底层隐藏分布。由于我们仅受可用数据集的限制，因此此方法通常不能很好地用作正则化器。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/0*xfCOt_Wo0Pa9fodp.png" /></p>
+<p>图片来源：<a class="reference external" href="https://www.researchgate.net/publication/319413978">https ://www.researchgate.net/publication/319413978</a></p>
+</section>
+<section id="b-k">
+<h2>b. K 折交叉验证（中等）：<a class="headerlink" href="#b-k" title="Permalink to this headline">#</a></h2>
+<p>此方法用于创建多个经过训练的网络，然后选择泛化误差最小的网络。在从隐藏分布采样的未见数据集上，具有最小泛化误差的模型有望比其他模型表现更好。</p>
+<p>在 K 折交叉验证中，将可用的训练数据集划分为 k 个不重叠的子集，并对 K 个模型进行训练。对于每个模型，k 个子集中的一个用于验证，而其余 (k-1) 个子集用于训练（如下图所示）。该模型一旦经过训练，就会在保留验证子集上进行评估，并记录性能。一旦所有 K 个模型都经过训练并记录了保留验证子集上的性能，则选择具有最佳性能指标的模型作为最终模型。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*ETZwPbOvu7AQF8ZVUcErzQ.png" /></p>
+<p>5 折交叉验证 — 图片来自 Author</p>
+</section>
+<section id="id7">
+<h2>3.修改训练算法<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<p>正则化也可以通过以各种方式修改训练算法来实现。下面讨论两种最常用的方法。</p>
+</section>
+<section id="a-dropout">
+<h2>a.Dropout（强）<a class="headerlink" href="#a-dropout" title="Permalink to this headline">#</a></h2>
+<p>当训练模型是神经网络时使用 Dropout。神经网络由多个隐藏层组成，其中一层的输出用作后续层的输入。后续层通过可学习参数修改输入（通常通过将其乘以矩阵并添加偏差和激活函数）。输入流经神经网络层，直到到达用于预测的最终输出层。</p>
+<p>神经网络中的每一层都由各种节点组成。上一层的节点连接到下一层的节点。在 dropout 方法中，连续层的节点之间的连接根据 dropout-ratio（丢弃的总连接的百分比）随机丢弃，并在当前迭代中训练剩余网络。在下一次迭代中，另一组随机连接被丢弃。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*WCP9F1g9PG4nlO-S4jMw9A.png" /></p>
+<p>dropout 方法确保神经网络学习到一组更健壮的特征，这些特征与所选节点的随机子集表现得同样好。通过随机丢弃连接，网络能够学习从输入到输出的更好的泛化映射，从而减少过度拟合。dropout ratio 需要仔细选择，它对学习模型有重大影响。dropout ratio 的一个好的值在 0.25 到 0.4 之间。</p>
+</section>
+<section id="b">
+<h2>b. 注入噪声（弱）<a class="headerlink" href="#b" title="Permalink to this headline">#</a></h2>
+<p>与dropout类似，这种方法通常在学习的模型是神经网络时使用。在这种方法中，我们篡改了通过反向传播学习的权重，以使其更健壮或对微小变化不敏感。在训练过程中，少量随机噪声被添加到更新的权重中，这有助于模型学习更强大的特征集。一组强大的功能可确保模型不会过度拟合训练数据。但是，这种方法作为正则化器效果不是很好。</p>
+</section>
+</section>
+<section id="id8">
+<h1>概括<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h1>
+<p>正则化在机器学习中被用作通过减少所考虑的 ML 模型的方差来解决过度拟合的方法。可以通过修改损失函数、采样方法或训练方法本身以多种方式实现正则化。下面的备忘单总结了不同的正则化方法。</p>
+<p><img alt="img" src="https://miro.medium.com/max/1050/1*KBU0hPg94w2TLa1SUgrAEg.png" /></p>
+<p>ML Cheatsheet 中的正则化 — 图片来源：<a class="reference external" href="http://www.cheatsheets.aqeel-anwar.com/">www.cheatsheets.aqeel-anwar.com</a></p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By isLinXu<br/>
+  
+      &copy; Copyright 2023, isLinXu.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
